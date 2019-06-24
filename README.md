@@ -1,4 +1,4 @@
-# 源 (yuen) : sound x visuals
-demo: https://yuen-soundxvisuals.herokuapp.com/
+Looking to visualize changes in spacetime curvature w.r.t. differing cosmological parameters.
+original demo: https://yuen-soundxvisuals.herokuapp.com/
 
-made with Three.js, Express.js, jQuery, Vanilla JS, and the YouTube Data API
+Originally forked from styvone's yuen. 
