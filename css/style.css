@@ -50,8 +50,8 @@ li:hover {
 	position: fixed;
 	right: 5px;
 	top: 5px;
-	width: 35vw;
-	height: 40vh;
+	width: 0vw;
+	height: 0vh;
 }
 .spinner {
 	width: 5vw;
