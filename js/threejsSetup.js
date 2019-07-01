@@ -46,6 +46,24 @@ geometry.vertices.push(new THREE.Vector3( 1000, 0, 0) );
 var line = new THREE.Line( geometry, material );
 scene.add( line );
 
+function median(numbers) {
+    // median of [3, 5, 4, 4, 1, 1, 2, 3] = 3
+    var median = 0, numsLen = numbers.length;
+    numbers.sort();
+ 
+    if (
+        numsLen % 2 === 0 // is even
+    ) {
+        // average of two middle numbers
+        median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2;
+    } else { // is odd
+        // middle number only
+        median = numbers[(numsLen - 1) / 2];
+    }
+ 
+    return median;
+}
+
 
 // animate the particle wave (default wave motion)
 var count = 0;
@@ -55,17 +73,20 @@ function animateWave(amp) {
 		for (var i = 0; i < AMOUNTX; i++) {
 			for (var j = 0; j < AMOUNTZ; j++) {
 				var current = waveGeometry.vertices[index++];
+				var max_y = 0;
 				// current.y = (Math.sin((i+count)*0.3)*amp)+(Math.sin((j+count)*0.5)*amp);
 				var R = 100*Math.sqrt(1/Math.abs(count - 1))
 				if (count - 1 > 0) {
-					current.y = Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) + Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
+					current.y = -Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) + Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
 				} else {
 					current.y = Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) - Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
 				}
 				waveGeometry.verticesNeedUpdate = true;
+				max_y = Math.sign(current.y)*Math.max(max_y, Math.abs(current.y));
 			}
 		}
 		count += 0.001;
+		camera.position.y = 1.2*max_y;
 	}
 }
 
