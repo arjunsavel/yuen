@@ -11,10 +11,9 @@ var controls = new THREE.TrackballControls(camera, renderer.domElement);
 
 // create field
 var waveGeometry = new THREE.Geometry();
-var SEPARATION = 3;
+var SEPARATION = 4;
 var AMOUNTX = 96;
 var AMOUNTZ = 96;
-var omega = 1.8
 max_y = 0
 for (var i = 0; i < AMOUNTX; i++) {
 	for (var j = 0; j < AMOUNTZ; j++) {
@@ -46,56 +45,55 @@ geometry.vertices.push(new THREE.Vector3( 1000, 0, 0) );
 var line = new THREE.Line( geometry, material );
 scene.add( line );
 
-function median(numbers) {
-    // median of [3, 5, 4, 4, 1, 1, 2, 3] = 3
-    var median = 0, numsLen = numbers.length;
-    numbers.sort();
- 
-    if (
-        numsLen % 2 === 0 // is even
-    ) {
-        // average of two middle numbers
-        median = (numbers[numsLen / 2 - 1] + numbers[numsLen / 2]) / 2;
-    } else { // is odd
-        // middle number only
-        median = numbers[(numsLen - 1) / 2];
-    }
- 
-    return median;
-}
 
+// input from the slider
+var rangeslider = document.getElementById("test5"); 
+var output = document.getElementById("demo"); 
+output.innerHTML = rangeslider.value; 
+  
+rangeslider.oninput = function() { 
+  output.innerHTML = this.value; 
+  console.log(this.value)
+  animateWave(this.value)
+} 
 
-// animate the particle wave (default wave motion)
-var count = 0;
-function animateWave(amp) {
+var count = 1.9; // sets the scale for R
+
+// animate the topological change
+function animateWave(value) {
 	var index = 0;
-	while (Math.abs(omega - count) > 0) {
-		for (var i = 0; i < AMOUNTX; i++) {
-			for (var j = 0; j < AMOUNTZ; j++) {
-				var current = waveGeometry.vertices[index++];
-				var max_y = 0;
-				// current.y = (Math.sin((i+count)*0.3)*amp)+(Math.sin((j+count)*0.5)*amp);
-				var R = 100*Math.sqrt(1/Math.abs(count - 1))
-				if (count - 1 > 0) {
-					current.y = -Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) + Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
-				} else {
-					current.y = Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) - Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
-				}
-				waveGeometry.verticesNeedUpdate = true;
-				max_y = Math.sign(current.y)*Math.max(max_y, Math.abs(current.y));
+	// while (Math.abs(value - count) > 0) {
+	for (var i = 0; i < AMOUNTX - 10; i++) {
+		for (var j = 0; j < AMOUNTZ - 10; j++) {
+			var current = waveGeometry.vertices[index++];
+			var max_y = 0;
+			var R = 100*Math.sqrt(1/Math.abs(count - 1))
+			// debugger;
+			try {
+		
+			if (count - 1 > 0) {
+				current.y = Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) + Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
+			} else {
+				current.y = Math.sqrt(Math.pow(R, 2) + Math.pow(current.x, 2) - Math.pow(current.z, 2)); //basically set radius with omega — given hubble distance.
 			}
 		}
-		count += 0.001;
-		camera.position.y = 1.2*max_y;
+			catch(error) {
+				console.log(index)
+			}
+			waveGeometry.verticesNeedUpdate = true;
+			max_y = Math.sign(current.y)*Math.max(max_y, Math.abs(current.y));
+		}
 	}
-}
+	count += 0.001;
+	// camera.position.y = 1.2*max_y;
+	}
+// }
 
 // animate loop
 var animate = function () {
 	controls.update();
 	requestAnimationFrame(animate);
 	renderer.render(scene, camera);
-	audioUpdate();
 };
 
 animate();

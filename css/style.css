@@ -53,6 +53,32 @@ li:hover {
 	width: 0vw;
 	height: 0vh;
 }
+
+.rangeslider{ 
+    width: 50%; 
+} 
+  
+.myslider { 
+    -webkit-appearance: none; 
+    background: #FCF3CF  ; 
+    width: 50%; 
+    height: 20px; 
+    opacity: 2; 
+   } 
+  
+  
+.myslider::-webkit-slider-thumb { 
+    -webkit-appearance: none; 
+    cursor: pointer; 
+    background: #34495E  ; 
+    width: 5%; 
+    height: 20px; 
+} 
+  
+  
+.myslider:hover { 
+    opacity: 1; 
+} 
 .spinner {
 	width: 5vw;
 	height: 6vh;
